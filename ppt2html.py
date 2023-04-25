@@ -7,14 +7,15 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 DOUBLESPACE_PATTERN  = re.compile(r"\s+")
 
-def ppt2html(ppt_path: str):
+def ppt2html(ppt_path: str, debug: bool=False):
     prs = pptx.Presentation(ppt_path)
     output = ""
 
     for _, slide in enumerate(prs.slides):
         # For debugging
-        print(f"{_}-slide")
-        print("="*20)
+        if debug:
+            print(f"{_}-slide")
+            print("="*20)
         single_slide_output = ""
 
         # Reordering for sequential access from top to bottom
@@ -55,8 +56,9 @@ def ppt2html(ppt_path: str):
                 output +=DOUBLESPACE_PATTERN.sub(" ",shape.text_frame.text)+"\n"
 
         # For debugging
-        print(single_slide_output)
-        print("="*20)
+        if debug:
+            print(single_slide_output)
+            print("="*20)
         output += "\n"
 
     return output

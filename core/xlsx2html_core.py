@@ -5,6 +5,7 @@ from typing import List
 
 import openpyxl
 import six
+from openpyxl import load_workbook
 from openpyxl.chart.shapes import GraphicalProperties
 from openpyxl.drawing.image import Image
 from openpyxl.drawing.spreadsheet_drawing import AnchorMarker
@@ -398,3 +399,7 @@ def xlsx2html(
     output.write(html)
     output.flush()
     return output
+
+def get_sheetnames_xlsx(filepath):
+    wb = load_workbook(filepath, read_only=True, keep_links=False)
+    return wb.sheetnames

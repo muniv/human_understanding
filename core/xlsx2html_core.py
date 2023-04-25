@@ -400,6 +400,31 @@ def xlsx2html(
     output.flush()
     return output
 
+def xlsx2body(
+    filepath,
+    locale="en",
+    sheet=None,
+    parse_formula=False,
+    append_headers=(lambda dumb1, dumb2: True),
+    append_lineno=(lambda dumb1, dumb2: True),
+    default_cell_border="none",
+):
+    wb = openpyxl.load_workbook(filepath, data_only=True)
+    ws = get_sheet(wb, sheet)
+
+    fs = None
+    if parse_formula:
+        fb = openpyxl.load_workbook(filepath, data_only=False)
+        fs = get_sheet(fb, sheet)
+
+    data = worksheet_to_data(
+        ws, locale=locale, fs=fs, default_cell_border=default_cell_border
+    )
+    body_string = render_table(data, append_headers, append_lineno)
+
+
+    return body_string
+
 def get_sheetnames_xlsx(filepath):
     wb = load_workbook(filepath, read_only=True, keep_links=False)
     return wb.sheetnames
